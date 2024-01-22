@@ -74,7 +74,7 @@ int main(void)
             case 1:
                 cout << "Enter the customer ID: ";
                 cin >> customerId;
-                cout << "***************************************************" << endl;
+                cout << "***************************************************************" << endl;
                 if (customerLogin(conn, customerId) == 1)
                 {
                     //call customerService()
@@ -110,7 +110,7 @@ int mainMenu()
     do
     {
         // diplay the menu options
-        cout << "******************** Main Menu ********************" << endl;
+        cout << "************************** Main Menu **************************" << endl;
         cout << "1)	Login" << endl;
         cout << "0)	Exit" << endl;
         // read an option value
@@ -132,43 +132,48 @@ int subMenu()
 {
     int opt = 1;
 
-    do {
+    do
+    {
         // diplay the menu options
+        cout << endl;
         cout << "******************** Customer Service Menu ********************" << endl;
         cout << "1) Place an order" << endl;
         cout << "2) Check an order status" << endl;
         cout << "3) Cancel an order" << endl;
         cout << "0) Exit" << endl;
+
         // read an option value
-
-        if (opt < 0 || opt > 3) {
-
+        if (opt < 0 || opt > 3)
+        {
             cout << "You entered a wrong value. Enter an option (0-1): ";
         }
-        else {
+        else
+        {
             cout << "Enter an option (0-3): ";
-
         }
 
         cin >> opt;
 
     } while (opt < 0 || opt > 3);
 
+    cout << "******************** Loading Selected Menu ********************" << endl << endl;
+
     return opt;
 }
 
-void customerService(Connection* conn, int customerId) {
+void customerService(Connection* conn, int customerId)
+{
     struct ShoppingCart cart[5];
     int checkedout = 0;
     int productCount;
     int orderId;
     int opt = 0;
 
-    do {
-
+    do
+    {
         opt = subMenu();
-        switch (opt) {
-
+        switch (opt)
+        {
         case 1:
 
             cout << ">-------- Place an order ---------<" << endl;
@@ -176,12 +181,16 @@ void customerService(Connection* conn, int customerId) {
             productCount = addToCart(conn, cart);
             displayProducts(cart, productCount);
             checkedout = checkout(conn, cart, customerId, productCount);
-            if (checkedout) {
+
+            if (checkedout)
+            {
                cout << "The order is successfully completed." << endl;
             }
-            else {
+            else
+            {
                cout << "The order is cancelled." << endl;
             }
+
             break;
         case 2:
             cout << ">-------- Check the order status --------<" << endl;
@@ -199,13 +208,10 @@ void customerService(Connection* conn, int customerId) {
         case 0:
             cout << "Back to main menu!..." << endl;
             break;
-
         }
     } while (opt != 0);
-
 }
 
-//Complete this function
 void displayOrderStatus(Connection* conn, int orderId, int customerId)
 {
     std::string status;
@@ -228,7 +234,6 @@ void displayOrderStatus(Connection* conn, int orderId, int customerId)
     conn->terminateStatement(stmt);
 }
 
-//Complete this function
 void cancelOrder(Connection* conn, int orderId, int customerId)
 {
     int tempOrderID = orderId;
@@ -315,8 +320,8 @@ void closeConnection(Connection* conn, Environment* env)
     env->terminateConnection(conn);
 }
 
-int customerLogin(Connection* conn, int customerId) {
-
+int customerLogin(Connection* conn, int customerId)
+{
     Statement* stmt = nullptr;
     int found = 0;
     stmt = conn->createStatement("BEGIN find_customer(:1, :2); END;");
